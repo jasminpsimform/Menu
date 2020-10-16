@@ -106,7 +106,7 @@ class ContentViewController: NSViewController {
             if item.isSeparator {
                 addSeparator()
             } else {
-                addMenuElement(with: item, isSelected: item.id == selectedId)
+                addMenuElement(with: item, index: index, isSelected: item.id == selectedId)
             }
         }
     }
@@ -135,8 +135,8 @@ class ContentViewController: NSViewController {
         menuElements.append(separatorContainer)
     }
 
-    private func addMenuElement(with menuItem: MenuItem, isSelected: Bool) {
-        let menuElement = MenuElement(with: menuItem, isSelected: isSelected, configuration: configuration)
+    private func addMenuElement(with menuItem: MenuItem, index: Int, isSelected: Bool) {
+        let menuElement = MenuElement(with: menuItem, index: index, isSelected: isSelected, configuration: configuration)
         menuElement.translatesAutoresizingMaskIntoConstraints = false
         menuElement.delegate = self
         menuElement.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)

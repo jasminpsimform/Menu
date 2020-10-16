@@ -161,11 +161,11 @@ public extension NSWindow {
 }
 
 public extension CAMediaTimingFunction {
-    static let easeIn = CAMediaTimingFunction(name: .easeIn)
-    static let easeOut = CAMediaTimingFunction(name: .easeOut)
-    static let easeInEaseOut = CAMediaTimingFunction(name: .easeInEaseOut)
-    static let linear = CAMediaTimingFunction(name: .linear)
-    static let `default` = CAMediaTimingFunction(name: .default)
+    static let easeIn = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+    static let easeOut = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+    static let easeInEaseOut = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+    static let linear = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+    static let `default` = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
 }
 
 extension NSEdgeInsets {

@@ -11,7 +11,7 @@ public struct MenuItem: CustomDebugStringConvertible {
     public var isEnabled = true
     public let id: UUID
 
-    let action: (() -> Void)?
+    let action: ((Int) -> Void)?
     let title: String
     let image: NSImage?
     let isSelectable: Bool
@@ -23,7 +23,7 @@ public struct MenuItem: CustomDebugStringConvertible {
         self.init("", image: nil, customView: customView, isSelectable: false, action: nil)
     }
 
-    public init(_ title: String, image: NSImage? = nil, customView: NSView? = nil, isSelectable: Bool = true, action: (() -> Void)?) {
+    public init(_ title: String, image: NSImage? = nil, customView: NSView? = nil, isSelectable: Bool = true, action: ((Int) -> Void)?) {
         self.action = action
         self.title = title
         self.image = image

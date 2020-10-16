@@ -39,8 +39,8 @@ final class CheckmarkView: NSView {
         checkmarkLayer.path = makeCheckmarkPath()
         checkmarkLayer.strokeEnd = 0
         checkmarkLayer.strokeColor = configuration.menuItemCheckmarkColor.cgColor
-        checkmarkLayer.lineCap = CAShapeLayerLineCap.round
-        checkmarkLayer.lineJoin = CAShapeLayerLineJoin.round
+        checkmarkLayer.lineCap = kCALineCapRound
+        checkmarkLayer.lineJoin = kCALineCapRound
         layer?.addSublayer(checkmarkLayer)
     }
 

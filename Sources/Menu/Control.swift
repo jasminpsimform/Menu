@@ -81,7 +81,7 @@ class Control: NSControl {
         animation.duration = hoverAnimationDuration
         animation.fromValue = oldColor.cgColor
         animation.toValue = newColor.cgColor
-        animation.fillMode = .both
+        animation.fillMode = kCAFillModeBoth
         animation.timingFunction = .easeInEaseOut
         animation.isRemovedOnCompletion = false
         hoverLayer.add(animation, forKey: "fillColor")

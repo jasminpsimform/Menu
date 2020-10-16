@@ -97,7 +97,7 @@ open class MenuConfiguration: Configuration {
     }
 
     open var backgroundColor: NSColor {
-        return NSColor.init(calibratedRed: 84/255, green: 181/255, blue: 146/255, alpha: 1.0)
+        return NSColor.black
     }
 
     open var cornerRadius: CGFloat {

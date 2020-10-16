@@ -12,23 +12,23 @@ protocol MenuElementDelegate: AnyObject {
 }
 
 class MenuElement: NSView {
-    let handler: () -> Void
+    let handler: (Int) -> Void
     weak var delegate: MenuElementDelegate?
     private let configuration: Configuration
     private var checkmark: CheckmarkView!
-
-    init(with menuItem: MenuItem, isSelected: Bool = false, configuration: Configuration) {
+    var index: Int = 0
+    init(with menuItem: MenuItem, index: Int, isSelected: Bool = false, configuration: Configuration) {
         self.configuration = configuration
-        handler = menuItem.action ?? {}
-
+        handler = menuItem.action ?? { index in }
+        
         super.init(frame: .zero)
-
+        self.index = index
         alphaValue = menuItem.isEnabled ? 1.0 : 0.5
 
         if let customView = menuItem.customView {
             makeCustomViewElement(with: customView)
         } else {
-            makeStandardElement(with: menuItem, isSelected: isSelected)
+            makeStandardElement(with: menuItem, index: index, isSelected: isSelected)
         }
     }
 
@@ -37,7 +37,7 @@ class MenuElement: NSView {
     }
 
     @objc private func menuElementClicked(_ sender: Control) {
-        handler()
+        handler(sender.tag)
         delegate?.didClickMenuElement(self)
     }
 
@@ -63,7 +63,7 @@ class MenuElement: NSView {
         ])
     }
 
-    private func makeStandardElement(with menuItem: MenuItem, isSelected: Bool) {
+    private func makeStandardElement(with menuItem: MenuItem, index: Int, isSelected: Bool) {
         let stackView = makeHorizontalStackView()
 
         var lImageView: NSImageView? = nil
@@ -119,7 +119,7 @@ class MenuElement: NSView {
         }
 
         let control = makeHoverControl(update: label, leftImageView: lImageView, rightImageView: rImageView, isEnabled: menuItem.isEnabled, isSelected: isSelected)
-
+        control.tag = index
         addSubview(control)
         addSubview(stackView)
 
@@ -214,7 +214,7 @@ class MenuElement: NSView {
                 rightImageView?.contentTintColor = isHover ? self.configuration.menuItemHoverImageTintColor : isSelected ? self.configuration.menuItemHoverImageTintColor : self.configuration.menuItemImageTintColor
             }
         }
-
+        
         control.translatesAutoresizingMaskIntoConstraints = false
         control.target = self
         control.action = #selector(menuElementClicked(_:))

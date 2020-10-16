@@ -6,7 +6,35 @@
 //
 
 import Cocoa
-import EventMonitor
+//import EventMonitor
+
+open class EventMonitor {
+    
+    fileprivate var monitor: AnyObject?
+    fileprivate let mask: NSEvent.EventTypeMask
+    fileprivate let handler: (NSEvent?) -> ()
+    
+    public init(mask: NSEvent.EventTypeMask, handler: @escaping (NSEvent?) -> ()) {
+        self.mask = mask
+        self.handler = handler
+    }
+    
+    deinit {
+        stop()
+    }
+    
+    open func start() {
+        monitor = NSEvent.addGlobalMonitorForEvents(matching: mask, handler: handler) as AnyObject?
+    }
+    
+    open func stop() {
+        if monitor != nil {
+            NSEvent.removeMonitor(monitor!)
+            monitor = nil
+        }
+    }
+}
+
 
 public final class Menu {
     public private(set) var items: [MenuItem]
@@ -62,7 +90,7 @@ public final class Menu {
     public func selectItem(at index: Int) {
         guard let item = item(at: index) else { return }
         selectedId = item.id
-        item.action?()
+        item.action?(index)
     }
 
     // MARK: - Adding and Removing Menu Items
@@ -151,7 +179,7 @@ public final class Menu {
 
         NSAnimationContext.runAnimationGroup { context in
             context.duration = configuration.animationDuration
-            context.timingFunction = CAMediaTimingFunction(name: .easeIn)
+            context.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
             window.animator().alphaValue = 1.0
         }
     }
@@ -159,7 +187,7 @@ public final class Menu {
     private func fadeOut(window: NSWindow, completion: @escaping () -> Void) {
         NSAnimationContext.runAnimationGroup ({ context in
             context.duration = configuration.animationDuration
-            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            context.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
             window.animator().alphaValue = 0.0
         }, completionHandler: {
             completion()
@@ -171,8 +199,8 @@ public final class Menu {
             self?.dismiss(animated: false)
         })
 
-        localMonitor = EventMonitor(monitorType: .local, mask: [.leftMouseDown, .rightMouseDown, .otherMouseDown], globalHandler: nil, localHandler: { [weak self] event -> NSEvent? in
-            guard let localEvent = event else { return event }
+        localMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown, .otherMouseDown], handler: { [weak self] event in
+            guard let localEvent = event else { return }
 
             if localEvent.window != self?.window {
                 if localEvent.window == parentWindow {
@@ -186,7 +214,6 @@ public final class Menu {
 //                    }
                 }
             }
-            return localEvent
         })
         localMonitor?.start()
     }
